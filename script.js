@@ -295,52 +295,92 @@ document.addEventListener('DOMContentLoaded', () => {
 
   refreshGalleryTriggers();
 
-  // 9. Vision Consultation Form Handler (timewarpkissimmee@gmail.com)
+  // 9. Contact Form Handler — Matches timewarptattoos.com Hostinger Form Backend
+  // Form ID: "Contact form 10" | Element ID: "ai-pC-pa9" | Token: "fw036PNr6DAaFTraCq55xMiyOIi5Cvzm"
+  const HOSTINGER_FORM_TOKEN = 'fw036PNr6DAaFTraCq55xMiyOIi5Cvzm';
+  const HOSTINGER_ELEMENT_ID = 'ai-pC-pa9';
+  const HOSTINGER_POST_URL = `https://builder-backend.hostinger.com/u1/data/v3/post/${HOSTINGER_FORM_TOKEN}`;
+
   const visionForm = document.getElementById('timewarp-vision-form');
   const formFeedback = document.getElementById('form-feedback');
+  const submitBtn = document.getElementById('contact-submit-btn');
 
   if (visionForm) {
-    visionForm.addEventListener('submit', (e) => {
+    visionForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const fullName = document.getElementById('client-name')?.value.trim() || '';
       const email = document.getElementById('client-email')?.value.trim() || '';
       const phone = document.getElementById('client-phone')?.value.trim() || '';
-      const artist =
-        document.getElementById('preferred-artist')?.value ||
-        'Open / Studio Recommendation';
-      const vision = document.getElementById('vision-details')?.value.trim() || '';
+      const artist = document.getElementById('preferred-artist')?.value || 'Any Artist';
+      const rawVision = document.getElementById('vision-details')?.value.trim() || '';
 
-      const subject = encodeURIComponent(
-        `Tattoo / Piercing Inquiry — ${fullName} (Artist: ${artist})`
-      );
-      const bodyLines = [
-        `Full Name: ${fullName}`,
-        `Email Address: ${email}`,
-        `Phone Number: ${phone}`,
-        `Preferred Artist / Service: ${artist}`,
-        ``,
-        `Tattoo / Piercing Vision (Size, Placement, Style, Budget, Artist):`,
-        vision,
-        ``,
-        `---`,
-        `Submitted via Timewarp Tattoo & Piercing Website (3262 Vineland Rd Suite 102, Kissimmee, FL 34746)`
-      ];
-      const bodyEncoded = encodeURIComponent(bodyLines.join('\n'));
-      const mailtoUrl = `mailto:timewarpkissimmee@gmail.com?subject=${subject}&body=${bodyEncoded}`;
+      const visionMessage =
+        artist && artist !== 'Any Artist'
+          ? `[Artist: ${artist}] ${rawVision}`
+          : rawVision;
 
-      if (formFeedback) {
-        formFeedback.style.display = 'block';
-        formFeedback.innerHTML = `
-          <strong>Inquiry Ready for Timewarp Tattoo!</strong><br>
-          Your consultation details for <strong>${artist}</strong> have been prepared for <strong>timewarpkissimmee@gmail.com</strong>.
-          <div style="display:flex;flex-wrap:wrap;gap:0.6rem;margin-top:0.65rem;">
-            <a href="${mailtoUrl}" class="btn btn-neon-lime" style="padding:0.45rem 0.9rem;font-size:0.78rem;">Send via Email App</a>
-            <a href="tel:4074799843" class="btn btn-neon-cyan" style="padding:0.45rem 0.9rem;font-size:0.78rem;">Call Shop: (407) 479-9843</a>
-          </div>
-        `;
+      // Exact schema from timewarptattoos.com GridFormProviderUser
+      const payload = {
+        elementId: HOSTINGER_ELEMENT_ID,
+        formData: {
+          'Full name': {
+            value: fullName,
+            type: 'text'
+          },
+          Email: {
+            value: email,
+            type: 'email'
+          },
+          Message: {
+            value: phone,
+            type: 'text'
+          },
+          'Describe your vision! Size, placement, style, budget, artist, etc. !': {
+            value: visionMessage,
+            type: 'text'
+          }
+        }
+      };
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
       }
 
-      window.location.href = mailtoUrl;
+      try {
+        const res = await fetch(HOSTINGER_POST_URL, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json;charset=UTF-8'
+          },
+          credentials: 'omit',
+          mode: 'cors',
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          throw new Error(`Form submission failed with HTTP ${res.status}`);
+        }
+
+        if (formFeedback) {
+          formFeedback.style.display = 'block';
+          formFeedback.innerHTML = '<strong>Thanks for booking</strong>';
+        }
+        visionForm.reset();
+      } catch (err) {
+        console.error(err);
+        if (formFeedback) {
+          formFeedback.style.display = 'block';
+          formFeedback.innerHTML =
+            '<strong>Something went wrong.</strong> Please try again or email <a href="mailto:timewarpkissimmee@gmail.com" style="color:var(--neon-lime);">timewarpkissimmee@gmail.com</a>.';
+        }
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Contact Us';
+        }
+      }
     });
   }
 });

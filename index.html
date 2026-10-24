@@ -854,20 +854,20 @@
 
         <div class="contact-grid">
           <div class="vision-form-card">
-            <form id="timewarp-vision-form">
+            <form id="timewarp-vision-form" name="Contact form 10">
               <div class="form-group">
                 <label class="form-label" for="client-name">Your Full Name*</label>
-                <input type="text" id="client-name" class="form-input" placeholder="Tell us your name" required />
+                <input type="text" id="client-name" name="Full name" class="form-input" placeholder="Enter name" required />
               </div>
 
               <div class="form-row-2">
                 <div class="form-group">
                   <label class="form-label" for="client-email">Email Address*</label>
-                  <input type="email" id="client-email" class="form-input" placeholder="Where can we reply?" required />
+                  <input type="email" id="client-email" name="Email" class="form-input" placeholder="Enter email" required />
                 </div>
                 <div class="form-group">
                   <label class="form-label" for="client-phone">Phone Number*</label>
-                  <input type="tel" id="client-phone" class="form-input" placeholder="Best number to reach you" required />
+                  <input type="tel" id="client-phone" name="Message" class="form-input" placeholder="Enter phone" required />
                 </div>
               </div>
 
@@ -893,13 +893,14 @@
                 </label>
                 <textarea
                   id="vision-details"
+                  name="Describe your vision! Size, placement, style, budget, artist, etc. !"
                   class="form-textarea"
-                  placeholder="Share the details of your tattoo idea"
+                  placeholder="Enter your message"
                   required
                 ></textarea>
               </div>
 
-              <button type="submit" class="btn btn-neon-magenta" style="width:100%;padding:0.9rem;font-size:1rem;">
+              <button type="submit" id="contact-submit-btn" class="btn btn-neon-magenta" style="width:100%;padding:0.9rem;font-size:1rem;">
                 Contact Us
               </button>
 
