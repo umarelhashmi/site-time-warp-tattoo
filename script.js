@@ -13,10 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const hour = nowEst.getHours();
       const isOpen = hour >= 11 && hour < 19;
       statusTextEl.textContent = isOpen
-        ? 'OPEN NOW IN KISSIMMEE • 11:00 AM – 7:00 PM'
-        : 'OPEN DAILY • 11:00 AM – 7:00 PM EST';
+        ? 'Open Now • 11 AM – 7 PM'
+        : 'Open Daily • 11 AM – 7 PM';
     } catch (e) {
-      statusTextEl.textContent = 'OPEN DAILY • 11:00 AM – 7:00 PM';
+      statusTextEl.textContent = 'Open Daily • 11 AM – 7 PM';
     }
   }
 
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     mobileDrawer.setAttribute('aria-hidden', String(!open));
     if (mobileBtn) {
       mobileBtn.setAttribute('aria-expanded', String(open));
-      mobileBtn.textContent = open ? '[ CLOSE × ]' : '[ MENU ≡ ]';
+      mobileBtn.textContent = open ? 'Close ×' : 'Menu';
     }
   };
 
